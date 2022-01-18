@@ -74,9 +74,27 @@ Person.prototype.toString = function(){
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, mpg) {
+  this.model = model;
+  this.milesPerGallon = mpg;
+  this.tank = 0;
+  this.odometer = 0;
 }
+Car.prototype.fill = function(gallons){
+  this.tank = this.tank + gallons;
+}
+Car.prototype.drive = function(dist){
+  const driveableMiles = this.tank * this.milesPerGallon;
+  if(dist <= driveableMiles){
+    this.odometer = this.odometer + dist;
+    this.tank = this.tank - (dist/this.milesPerGallon);
+  }else{
+    this.odometer = this.odometer * driveableMiles;
+    this.tank = 0;
+    return `I ran out of fuel at ${this.odometer} miles`
+  }
+}
+
 
 
 /*
@@ -86,18 +104,26 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+    this.favoriteToy = favoriteToy;   
 }
+
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`;
+}
+
+
 
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Window Binding - when none of the other rules apply, this will return the window or global object in node or undefined in strict mode.
+  2. Implicit Binding - when the function is invoked, look to the left of the dot thats what this refers to
+  3. Explicit Binding - .call, .apply, .bind
+  4. New Binding - when an function is created as a constructor, this points to the newly created object
 */
 
 
